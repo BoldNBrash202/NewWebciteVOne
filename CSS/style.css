@@ -1,124 +1,170 @@
-/* --- 1. GLOBAL DEFAULTS (Apple Design Language) --- */
+/* --- 1. GLOBAL DEFAULTS (Liquid Apple Design) --- */
 :root {
     --apple-blue: #0071e3;
-    --apple-text-light: #1d1d1f;
-    --apple-bg-light: #ffffff;
-    --apple-subtext-light: #86868b;
-
-    --apple-text-dark: #f5f5f7;
-    --apple-bg-dark: #000000;
-    --apple-subtext-dark: #a1a1a6;
 }
 
 body {
-    background-color: var(--apple-bg-light);
-    color: var(--apple-text-light);
+    /* LOCAL Background Image */
+    background: url('../images/Main Background image.jpg') no-repeat center center fixed;
+    background-size: cover;
+    /* Ensures image covers entire screen */
+
+    color: #ffffff;
+    /* White text by default on rich backgrounds */
     margin: 0;
-    /* Apple System Font Stack ensures native look on Mac */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
-    /* Makes text look crisp */
-    transition: background-color 0.4s ease, color 0.4s ease;
+    min-height: 100vh;
 }
 
 main {
-    max-width: 980px;
-    /* Standard Apple container width */
-    margin: 0 auto;
-    padding: 60px 20px;
+    max-width: 900px;
+    margin: 60px 20px;
+    padding: 80px 40px;
     text-align: center;
-    /* Apple often centers intro text */
+
+    /* --- CONVINCING LIQUID GLASS MAIN CARD --- */
+    /* 1. Gradient creates "Sheen" (Light top-left, transparent bottom-right) */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.25),
+            rgba(255, 255, 255, 0.05));
+
+    /* 2. Heavy Blur */
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+
+    /* 3. Border highlights logic (Light top/left, Dark bottom/right) */
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+
+    border-radius: 40px;
+
+    /* 4. Deep, soft shadow for depth */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 /* --- 2. COMPONENT STYLES --- */
 
-/* Top Bar - The "Frosted Glass" Effect */
+/* Top Bar - Glass Pill */
 .top-bar {
     position: sticky;
-    /* Sticks to top when scrolling */
-    top: 0;
+    top: 20px;
     z-index: 1000;
+    margin: 0 20px;
 
-    background-color: rgba(255, 255, 255, 0.8);
-    /* Semi-transparent */
-    backdrop-filter: saturate(180%) blur(20px);
-    /* The Blur magic */
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    /* Safari support */
+    /* Glass Effect */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.4),
+            rgba(255, 255, 255, 0.1));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 
-    padding: 12px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    padding: 10px 20px;
     display: flex;
     justify-content: flex-end;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.16);
-    transition: background-color 0.4s, border-color 0.4s;
 }
 
-/* Button Styling - Round "Pill" Shape */
+/* Button Styling (Apple Pill) */
 #darkModeBtn {
-    padding: 6px 16px;
+    padding: 8px 24px;
     cursor: pointer;
     border: none;
     border-radius: 980px;
-    /* Fully rounded ends */
-    background-color: var(--apple-blue);
+
+    /* Button Glass Effect */
+    background: rgba(255, 255, 255, 0.2);
     color: white;
-    font-size: 12px;
-    font-weight: 500;
-    /* Medium weight */
-    letter-spacing: -0.01em;
-    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    font-size: 13px;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease, transform 0.2s ease;
 }
 
 #darkModeBtn:hover {
-    background-color: #0077ed;
-    /* Slightly brighter on hover */
-    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.03);
 }
 
-#darkModeBtn:active {
-    transform: scale(0.96);
-    /* Click press effect */
-}
-
-/* H1 Header - Clean, Large Typography */
+/* Typography */
 h1 {
-    font-size: 48px;
-    font-weight: 700;
-    letter-spacing: -0.003em;
-    margin-bottom: 10px;
-    background-color: transparent;
-    /* Removed the square block */
-    color: inherit;
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 15px;
     padding: 0;
+    background-color: transparent;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    /* Soft shadow for legibility */
 }
 
 p {
-    font-size: 20px;
-    /* Apple uses larger body text */
-    line-height: 1.4;
-    font-weight: 400;
-    color: var(--apple-subtext-light);
+    font-size: 24px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
     max-width: 700px;
     margin: 0 auto;
-    /* Center the paragraph */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* --- 3. DARK MODE OVERRIDES (True Black) --- */
+/* --- 3. DARK MODE OVERRIDES (Night Mode) --- */
 
-body.dark-mode {
-    background-color: var(--apple-bg-dark);
-    /* True Black */
-    color: var(--apple-text-dark);
+/* We use a pseudo-element to darken the background image in dark mode 
+   because we can't transition background-image URLs smoothly */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: black;
+    opacity: 0;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
 }
 
+body.dark-mode::before {
+    opacity: 0.6;
+    /* Dims the beautiful lake wallpaper to "Night" */
+}
+
+body.dark-mode main {
+    background: linear-gradient(135deg,
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.2));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 1. Dark Mode styling for the Top Bar */
 body.dark-mode .top-bar {
-    background-color: rgba(0, 0, 0, 0.72);
-    /* Translucent Black */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+    background: linear-gradient(135deg,
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.3));
+
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
-body.dark-mode p {
-    color: var(--apple-subtext-dark);
+/* 2. Dark Mode styling for the Button */
+body.dark-mode #darkModeBtn {
+    /* Darker glass for night time */
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.8);
 }
 
-/* Button stays blue in dark mode, standard Apple practice */
+body.dark-mode #darkModeBtn:hover {
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+}
