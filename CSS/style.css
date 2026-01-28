@@ -1,0 +1,31 @@
+body {
+    background-color: #ffffff;
+    color: #000000;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0;
+    /* Removing default margin usually looks better with top bars */
+}
+/* Top Bar Styles */
+.top-bar {
+    background-color: #f1f3f4;
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+    /* Moves button to the right */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Top Bar Dark Mode */
+body.dark-mode {
+    background-color: #303134;
+    color: #e8eaed;
+    border-bottom: 1px solid #5f6368;
+}
+
+h1 {
+    background-color: #c84343e3;
+    padding: 20px;
+    display: inline-block;
+    border-radius: 2rem;
+    /* Keeps the background only around the text */
+}
