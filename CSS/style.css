@@ -1,31 +1,124 @@
-body {
-    background-color: #ffffff;
-    color: #000000;
-    transition: background-color 0.3s, color 0.3s;
-    margin: 0;
-    /* Removing default margin usually looks better with top bars */
+/* --- 1. GLOBAL DEFAULTS (Apple Design Language) --- */
+:root {
+    --apple-blue: #0071e3;
+    --apple-text-light: #1d1d1f;
+    --apple-bg-light: #ffffff;
+    --apple-subtext-light: #86868b;
+
+    --apple-text-dark: #f5f5f7;
+    --apple-bg-dark: #000000;
+    --apple-subtext-dark: #a1a1a6;
 }
-/* Top Bar Styles */
+
+body {
+    background-color: var(--apple-bg-light);
+    color: var(--apple-text-light);
+    margin: 0;
+    /* Apple System Font Stack ensures native look on Mac */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    /* Makes text look crisp */
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+main {
+    max-width: 980px;
+    /* Standard Apple container width */
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+    /* Apple often centers intro text */
+}
+
+/* --- 2. COMPONENT STYLES --- */
+
+/* Top Bar - The "Frosted Glass" Effect */
 .top-bar {
-    background-color: #f1f3f4;
-    padding: 15px;
+    position: sticky;
+    /* Sticks to top when scrolling */
+    top: 0;
+    z-index: 1000;
+
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Semi-transparent */
+    backdrop-filter: saturate(180%) blur(20px);
+    /* The Blur magic */
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    /* Safari support */
+
+    padding: 12px 20px;
     display: flex;
     justify-content: flex-end;
-    /* Moves button to the right */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+    transition: background-color 0.4s, border-color 0.4s;
 }
 
-/* Top Bar Dark Mode */
-body.dark-mode {
-    background-color: #303134;
-    color: #e8eaed;
-    border-bottom: 1px solid #5f6368;
+/* Button Styling - Round "Pill" Shape */
+#darkModeBtn {
+    padding: 6px 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 980px;
+    /* Fully rounded ends */
+    background-color: var(--apple-blue);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    /* Medium weight */
+    letter-spacing: -0.01em;
+    transition: all 0.2s ease;
 }
 
+#darkModeBtn:hover {
+    background-color: #0077ed;
+    /* Slightly brighter on hover */
+    transform: scale(1.02);
+}
+
+#darkModeBtn:active {
+    transform: scale(0.96);
+    /* Click press effect */
+}
+
+/* H1 Header - Clean, Large Typography */
 h1 {
-    background-color: #c84343e3;
-    padding: 20px;
-    display: inline-block;
-    border-radius: 2rem;
-    /* Keeps the background only around the text */
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.003em;
+    margin-bottom: 10px;
+    background-color: transparent;
+    /* Removed the square block */
+    color: inherit;
+    padding: 0;
 }
+
+p {
+    font-size: 20px;
+    /* Apple uses larger body text */
+    line-height: 1.4;
+    font-weight: 400;
+    color: var(--apple-subtext-light);
+    max-width: 700px;
+    margin: 0 auto;
+    /* Center the paragraph */
+}
+
+/* --- 3. DARK MODE OVERRIDES (True Black) --- */
+
+body.dark-mode {
+    background-color: var(--apple-bg-dark);
+    /* True Black */
+    color: var(--apple-text-dark);
+}
+
+body.dark-mode .top-bar {
+    background-color: rgba(0, 0, 0, 0.72);
+    /* Translucent Black */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+body.dark-mode p {
+    color: var(--apple-subtext-dark);
+}
+
+/* Button stays blue in dark mode, standard Apple practice */
