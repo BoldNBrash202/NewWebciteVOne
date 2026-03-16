@@ -1,89 +1,257 @@
-/* --- 1. GLOBAL DEFAULTS (Liquid Apple Design) --- */
 :root {
     --apple-blue: #0071e3;
 }
 
 body {
-    /* LOCAL Background Image */
     background: url('../images/Main Background image.jpg') no-repeat center center fixed;
     background-size: cover;
-    /* Ensures image covers entire screen */
-
     color: #ffffff;
-    /* White text by default on rich backgrounds */
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
 }
 
+/* --- 2. MOBILE LAYOUT (Default) --- */
 main {
+    width: 90%;
+    /* Takes up most of the phone screen */
     max-width: 900px;
-    margin: 60px 20px;
-    padding: 80px 40px;
+    box-sizing: border-box;
+    margin: 20px auto;
+    /* Smaller margins for mobile */
+    padding: 30px 20px;
+    /* Tighter padding for mobile */
     text-align: center;
 
-    /* --- CONVINCING LIQUID GLASS MAIN CARD --- */
-    /* 1. Gradient creates "Sheen" (Light top-left, transparent bottom-right) */
+    /* --- LIQUID GLASS EFFECT --- */
     background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.25),
-            rgba(255, 255, 255, 0.05));
+            rgba(255, 255, 255, 0.12),
+            rgba(255, 255, 255, 0.04));
 
-    /* 2. Heavy Blur */
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(30px);
+    /* Slightly less blur on mobile saves battery */
+    -webkit-backdrop-filter: blur(30px);
 
-    /* 3. Border highlights logic (Light top/left, Dark bottom/right) */
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-top: 1px solid rgba(255, 255, 255, 0.4);
     border-left: 1px solid rgba(255, 255, 255, 0.4);
 
-    border-radius: 40px;
-
-    /* 4. Deep, soft shadow for depth */
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 20px;
+    /* Smaller corners for small screens */
+    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.25);
 }
 
-/* --- 2. COMPONENT STYLES --- */
-
-/* Top Bar - Glass Pill */
 .top-bar {
     position: sticky;
-    top: 20px;
+    top: 10px;
+    /* Closer to top on mobile */
     z-index: 1000;
-    margin: 0 20px;
 
-    /* Glass Effect */
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+    box-sizing: border-box;
+
     background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.4),
-            rgba(255, 255, 255, 0.1));
+            rgba(255, 255, 255, 0.24),
+            rgba(255, 255, 255, 0.08));
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
 
-    border-radius: 20px;
+    border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
-    padding: 10px 20px;
-    display: flex;
-    justify-content: flex-end;
+    padding: 8px 15px;
+
+    /* Compact padding */
+    /* LAYOUT: Use Grid for precise center alignment of H1 */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    /* Left, Center, Right */
+    align-items: center;
+
+    transition: background 0.5s ease, border-color 0.5s ease;
 }
 
-/* Button Styling (Apple Pill) */
+.profile-menu-container {
+    grid-column: 1;
+    /* First column */
+    justify-self: start;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    /* Define height to stabilize hover area */
+}
+
+#profilePic {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    /* Stronger border for the button look */
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    cursor: pointer;
+    z-index: 20;
+    /* HIGHER than dropdown to sit on top */
+    position: relative;
+
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
+}
+
+/* DROPDOWN MENU STYLES */
+.dropdown-menu {
+    /* Layout inside the glass pill */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+
+    /* Hidden State (Initial) */
+    max-width: 0;
+    opacity: 0;
+    margin-left: -20px;
+    /* Tucked BEHIND the profile pic */
+    padding: 0;
+    /* No padding when closed */
+    overflow: hidden;
+    /* Hides icons when collapsed */
+
+    /* Liquid Glass Style */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border-radius: 50px;
+    /* Pill shape */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    /* Smooth Expansion Animation */
+    transition:
+        max-width 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        margin-left 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        padding 0.6s ease,
+        opacity 0.4s ease 0.1s;
+    /* Slight delay on opacity */
+
+    z-index: 10;
+    /* Lower than profile pic */
+}
+
+/* Show menu on hover */
+.profile-menu-container:hover .dropdown-menu {
+    max-width: 200px;
+    /* Maximum expansion width */
+    margin-left: 15px;
+    /* Slide OUT to the right */
+    padding: 0 20px;
+    /* Add internal breathing room */
+    opacity: 1;
+    height: 40px;
+    /* Match profile pic height */
+}
+
+/* Links inside the menu */
+.dropdown-menu a {
+    /* Layout & Size */
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    /* Initial State: Hidden & shifted left */
+    opacity: 0;
+    transform: translateX(-15px);
+
+    /* Prevent shrinking */
+    flex-shrink: 0;
+
+    /* Exit Transition */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* NEW: Image definition for the icons */
+.dropdown-menu a img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* Ensures the whole logo is visible */
+    border-radius: 50%;
+    /* Optional: Makes square icons circular */
+    pointer-events: none;
+    /* Let clicks pass through to the link */
+}
+
+.dropdown-menu a[aria-label="GitHub"] img {
+    transform: scale(0.8);
+    /* Shrink GitHub by 20% */
+}
+
+/* Specific scaling for logos to make them look visual equal */
+.dropdown-menu a[aria-label="X / Twitter"] img {
+    transform: scale(0.72);
+    border-radius: 0;
+}
+
+/* ENTRANCE STATE: Triggered when parent is hovered */
+.profile-menu-container:hover .dropdown-menu a {
+    opacity: 1;
+    transform: translateX(0);
+
+    /* Entrance Transition settings */
+    transition-property: opacity, transform;
+    transition-duration: 0.5s, 0.5s;
+    transition-timing-function: ease, cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Staggered Delays for smooth wave effect */
+.profile-menu-container:hover .dropdown-menu a:nth-child(1) {
+    transition-delay: 0.15s;
+}
+
+.profile-menu-container:hover .dropdown-menu a:nth-child(2) {
+    transition-delay: 0.25s;
+}
+
+.profile-menu-container:hover .dropdown-menu a:nth-child(3) {
+    transition-delay: 0.35s;
+}
+
+/* Icon Hover State */
+.dropdown-menu a:hover {
+    /* Scale up image on hover */
+    transform: scale(1.2);
+    transition-delay: 0s;
+}
+
+#profilePic:hover {
+    transform: scale(1.1);
+    border-color: #fff;
+}
+
 #darkModeBtn {
-    padding: 8px 24px;
+    grid-column: 3;
+    /* Third column */
+    justify-self: end;
+    padding: 6px 16px;
     cursor: pointer;
     border: none;
     border-radius: 980px;
-
-    /* Button Glass Effect */
     background: rgba(255, 255, 255, 0.2);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.4);
-
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     backdrop-filter: blur(4px);
     transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease, transform 0.2s ease;
@@ -94,32 +262,96 @@ main {
     transform: scale(1.03);
 }
 
-/* Typography */
+/* Typography Defaults (Mobile Strings) */
 h1 {
-    font-size: 64px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 15px;
+    font-size: 32px;
+    /* Readable on iPhone SE */
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
     padding: 0;
-    background-color: transparent;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    /* Soft shadow for legibility */
-}
-
-p {
-    font-size: 24px;
-    line-height: 1.5;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    max-width: 700px;
-    margin: 0 auto;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* --- 3. DARK MODE OVERRIDES (Night Mode) --- */
+p {
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 auto;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
 
-/* We use a pseudo-element to darken the background image in dark mode 
-   because we can't transition background-image URLs smoothly */
+/* --- 3. DESKTOP UPGRADES (Tablet & PC) --- */
+/* These styles ONLY apply if the screen is wider than 768px (iPad Portrait) */
+@media (min-width: 768px) {
+
+    main {
+        margin: 60px auto;
+        padding: 80px 40px;
+        border-radius: 40px;
+
+        /* Stronger blur on powerful desktop GPUs */
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .top-bar {
+        top: 20px;
+        padding: 10px 20px;
+        border-radius: 42px;
+    }
+
+        h1 {
+            grid-column: 2;
+            /* Center column */
+    
+            font-size: 24px;
+            /* Default smaller size for mobile */
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 0;
+            padding: 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    
+            /* Centering */
+            text-align: center;
+            white-space: nowrap;
+            /* Prevent wrapping */
+    
+            /* Transition for shrinking effect */
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+        }
+    
+        .top-bar:has(.profile-menu-container:hover) h1 {
+            /* Scale down AND shift right */
+            transform: scale(0.9) translateX(58px);
+            opacity: 0.8;
+            /* Optional: slight fade for focus effect */
+        }
+
+    h2 {
+        font-size: 64px;
+        /* Big luxury type is back */
+        letter-spacing: -0.02em;
+        margin-bottom: 15px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    p {
+        font-size: 24px;
+        max-width: 700px;
+    }
+
+    #darkModeBtn {
+        padding: 8px 24px;
+        font-size: 13px;
+    }
+}
+
+/* --- 4. DARK MODE OVERRIDES (Universally Applied) --- */
+
 body::before {
     content: "";
     position: fixed;
@@ -136,29 +368,24 @@ body::before {
 
 body.dark-mode::before {
     opacity: 0.6;
-    /* Dims the beautiful lake wallpaper to "Night" */
 }
 
 body.dark-mode main {
     background: linear-gradient(135deg,
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0.2));
+            rgba(0, 0, 0, 0.4),
+            rgba(0, 0, 0, 0.16));
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* 1. Dark Mode styling for the Top Bar */
 body.dark-mode .top-bar {
     background: linear-gradient(135deg,
-            rgba(0, 0, 0, 0.6),
-            rgba(0, 0, 0, 0.3));
-
+            rgba(0, 0, 0, 0.48),
+            rgba(0, 0, 0, 0.24));
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
-/* 2. Dark Mode styling for the Button */
 body.dark-mode #darkModeBtn {
-    /* Darker glass for night time */
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: rgba(255, 255, 255, 0.8);
@@ -167,4 +394,29 @@ body.dark-mode #darkModeBtn {
 body.dark-mode #darkModeBtn:hover {
     background: rgba(0, 0, 0, 0.6);
     color: white;
+}
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.about_me {
+    grid-row: span 3 / span 3;
+}
+
+.my_Schooling {
+    grid-row: span 3 / span 3;
+}
+
+.my_Projects {
+    grid-row: span 3 / span 3;
+}
+
+.more_about_Me {
+    grid-column: span 3 / span 3;
+    grid-row: span 2 / span 2;
+    grid-row-start: 4;
 }
