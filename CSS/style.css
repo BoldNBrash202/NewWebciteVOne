@@ -45,7 +45,6 @@ main {
 .top-bar {
     position: sticky;
     top: 10px;
-    /* Closer to top on mobile */
     z-index: 1000;
 
     width: 90%;
@@ -65,13 +64,20 @@ main {
 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
+    /* Enforce equal padding on left and right */
     padding: 8px 15px;
 
-    /* Compact padding */
-    /* LAYOUT: Use Grid for precise center alignment of H1 */
+    /* LAYOUT: Use Grid */
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    /* Left, Center, Right */
+
+    /* 
+                1. 'gap: 12px' puts a physical barrier between columns.
+                2. 'minmax(0, auto)' tells the center column it is allowed to shrink 
+                  smaller than the text width (triggering the ellipsis).
+            */
+    grid-template-columns: 1fr minmax(0, auto) 1fr;
+    gap: 12px;
+
     align-items: center;
 
     transition: background 0.5s ease, border-color 0.5s ease;
@@ -255,6 +261,7 @@ main {
     font-weight: 600;
     backdrop-filter: blur(4px);
     transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease, transform 0.2s ease;
+    margin: 0;
 }
 
 #darkModeBtn:hover {
@@ -264,13 +271,24 @@ main {
 
 /* Typography Defaults (Mobile Strings) */
 h1 {
-    font-size: 32px;
-    /* Readable on iPhone SE */
+    grid-column: 2;
+    /* Explicitly place in center column */
+
+    /* Resize text */
+    font-size: clamp(16px, 4.5vw, 24px);
     font-weight: 700;
     letter-spacing: -0.01em;
-    margin-bottom: 10px;
-    padding: 0;
+    margin: 0;
+    padding: 0 8px;
+    /* Slightly increased padding */
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /* Center text within its own cell */
+    text-align: center;
+    width: 100%;
 }
 
 p {
@@ -297,39 +315,33 @@ p {
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
 
-    .top-bar {
-        top: 20px;
-        padding: 10px 20px;
-        border-radius: 42px;
+    h1 {
+        grid-column: 2;
+        /* Center column */
+
+        font-size: 24px;
+        /* Default smaller size for mobile */
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        margin: 0;
+        padding: 0;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+        /* Centering */
+        text-align: center;
+        white-space: nowrap;
+        /* Prevent wrapping */
+
+        /* Transition for shrinking effect */
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
     }
 
-        h1 {
-            grid-column: 2;
-            /* Center column */
-    
-            font-size: 24px;
-            /* Default smaller size for mobile */
-            font-weight: 700;
-            letter-spacing: -0.01em;
-            margin: 0;
-            padding: 0;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    
-            /* Centering */
-            text-align: center;
-            white-space: nowrap;
-            /* Prevent wrapping */
-    
-            /* Transition for shrinking effect */
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
-        }
-    
-        .top-bar:has(.profile-menu-container:hover) h1 {
-            /* Scale down AND shift right */
-            transform: scale(0.9) translateX(58px);
-            opacity: 0.8;
-            /* Optional: slight fade for focus effect */
-        }
+    .top-bar:has(.profile-menu-container:hover) h1 {
+        /* Scale down AND shift right */
+        transform: scale(0.9) translateX(58px);
+        opacity: 0.8;
+        /* Optional: slight fade for focus effect */
+    }
 
     h2 {
         font-size: 64px;
@@ -396,27 +408,92 @@ body.dark-mode #darkModeBtn:hover {
     color: white;
 }
 
-.parent {
+.navigation_options {
+    /* Match dimensions of the 'Main' element */
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    /* 'auto' centers it horizontally like Main */
+    box-sizing: border-box;
+
+    /* Responsive Grid Layout */
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+
+    /* Container Spacing */
+    padding: 30px;
+
+    /* "Sub-element" Liquid Glass Background Container */
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.about_me {
-    grid-row: span 3 / span 3;
-}
-
-.my_Schooling {
-    grid-row: span 3 / span 3;
-}
-
+.about_me,
+.my_Schooling,
 .my_Projects {
-    grid-row: span 3 / span 3;
+    /* Remove fixed dimensions to allow grid to control size */
+    width: 100%;
+    min-height: 200px;
+    /* Ensure they have height even with little content */
+    aspect-ratio: 1 / 1;
+    /* Keeps them square-ish */
+
+    /* Liquid Glass Tile Styling */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.15),
+            rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+
+    /* Layout internals */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+
+    /* Text & Interaction */
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        background 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
 }
 
-.more_about_Me {
-    grid-column: span 3 / span 3;
-    grid-row: span 2 / span 2;
-    grid-row-start: 4;
+.about_me:hover,
+.my_Schooling:hover,
+.my_Projects:hover {
+    transform: translateY(-8px) scale(1.02);
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.25),
+            rgba(255, 255, 255, 0.1));
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Dark Mode Adjustments for these specific tiles */
+body.dark-mode .navigation_options {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .about_me,
+body.dark-mode .my_Schooling,
+body.dark-mode .my_Projects {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
 }
