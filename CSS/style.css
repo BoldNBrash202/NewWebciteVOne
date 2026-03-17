@@ -131,7 +131,7 @@ main {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
 
-    border-radius: 16px;
+    border-radius: 33px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
 
@@ -147,7 +147,15 @@ main {
     transition: background 0.5s ease, border-color 0.5s ease;
 }
 
-#darkModeBtn {
+.top-bar-buttons {
+    grid-column: 3;
+    justify-self: end;
+    display: flex;
+    gap: 10px;
+}
+
+#darkModeBtn,
+#homeBtn {
     grid-column: 3;
     justify-self: end;
     padding: 6px 16px;
@@ -165,7 +173,8 @@ main {
     margin: 0;
 }
 
-#darkModeBtn:hover {
+#darkModeBtn:hover,
+#homeBtn:hover {
     background: rgba(255, 255, 255, 0.4);
     transform: scale(1.03);
 }
