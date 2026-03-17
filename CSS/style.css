@@ -1,3 +1,6 @@
+/* =========================================
+   1. GLOBAL VARIABLES & RESET
+   ========================================= */
 :root {
     --apple-blue: #0071e3;
 }
@@ -12,25 +15,78 @@ body {
     min-height: 100vh;
 }
 
-/* --- 2. MOBILE LAYOUT (Default) --- */
+/* =========================================
+   2. TYPOGRAPHY
+   ========================================= */
+h1 {
+    /* Mobile First Defaults */
+    grid-column: 2;
+    /* Explicitly place in center column of Top Bar */
+    font-size: clamp(16px, 4.5vw, 24px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+    padding: 0 8px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    width: 100%;
+}
+
+p {
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 auto;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Desktop Typography Overrides */
+@media (min-width: 768px) {
+    h1 {
+        font-size: 24px;
+        /* Fixed size on larger screens */
+        padding: 0;
+        /* Transition for shrinking effect on desktop */
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+    }
+
+    h2 {
+        font-size: 64px;
+        /* Big luxury type */
+        letter-spacing: -0.02em;
+        margin-bottom: 15px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    p {
+        font-size: 24px;
+        max-width: 700px;
+    }
+}
+
+/* =========================================
+   3. LAYOUT CONTAINER (MAIN)
+   ========================================= */
 main {
+    /* Mobile Base */
     width: 90%;
-    /* Takes up most of the phone screen */
     max-width: 900px;
     box-sizing: border-box;
     margin: 20px auto;
-    /* Smaller margins for mobile */
     padding: 30px 20px;
     /* Tighter padding for mobile */
     text-align: center;
 
-    /* --- LIQUID GLASS EFFECT --- */
+    /* Liquid Glass Effect */
     background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.12),
             rgba(255, 255, 255, 0.04));
 
     backdrop-filter: blur(30px);
-    /* Slightly less blur on mobile saves battery */
     -webkit-backdrop-filter: blur(30px);
 
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -42,6 +98,23 @@ main {
     box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.25);
 }
 
+/* Desktop Layout Overrides */
+@media (min-width: 768px) {
+    main {
+        margin: 60px auto;
+        padding: 80px 40px;
+        border-radius: 40px;
+
+        /* Stronger blur on powerful desktop GPUs */
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+}
+
+/* =========================================
+   4. COMPONENT: TOP BAR
+   ========================================= */
 .top-bar {
     position: sticky;
     top: 10px;
@@ -63,194 +136,22 @@ main {
     border-top: 1px solid rgba(255, 255, 255, 0.5);
 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-
-    /* Enforce equal padding on left and right */
     padding: 8px 15px;
 
-    /* LAYOUT: Use Grid */
+    /* Grid Layout */
     display: grid;
-
-    /* 
-                1. 'gap: 12px' puts a physical barrier between columns.
-                2. 'minmax(0, auto)' tells the center column it is allowed to shrink 
-                  smaller than the text width (triggering the ellipsis).
-            */
     grid-template-columns: 1fr minmax(0, auto) 1fr;
     gap: 12px;
-
     align-items: center;
 
     transition: background 0.5s ease, border-color 0.5s ease;
 }
 
-.profile-menu-container {
-    grid-column: 1;
-    /* First column */
-    justify-self: start;
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 50px;
-    /* Define height to stabilize hover area */
-}
-
-#profilePic {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-
-    /* Stronger border for the button look */
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-
-    cursor: pointer;
-    z-index: 20;
-    /* HIGHER than dropdown to sit on top */
-    position: relative;
-
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
-}
-
-/* DROPDOWN MENU STYLES */
-.dropdown-menu {
-    /* Layout inside the glass pill */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 20px;
-
-    /* Hidden State (Initial) */
-    max-width: 0;
-    opacity: 0;
-    margin-left: -20px;
-    /* Tucked BEHIND the profile pic */
-    padding: 0;
-    /* No padding when closed */
-    overflow: hidden;
-    /* Hides icons when collapsed */
-
-    /* Liquid Glass Style */
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-
-    border-radius: 50px;
-    /* Pill shape */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-
-    /* Smooth Expansion Animation */
-    transition:
-        max-width 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-        margin-left 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-        padding 0.6s ease,
-        opacity 0.4s ease 0.1s;
-    /* Slight delay on opacity */
-
-    z-index: 10;
-    /* Lower than profile pic */
-}
-
-/* Show menu on hover */
-.profile-menu-container:hover .dropdown-menu {
-    max-width: 200px;
-    /* Maximum expansion width */
-    margin-left: 15px;
-    /* Slide OUT to the right */
-    padding: 0 20px;
-    /* Add internal breathing room */
-    opacity: 1;
-    height: 40px;
-    /* Match profile pic height */
-}
-
-/* Links inside the menu */
-.dropdown-menu a {
-    /* Layout & Size */
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    text-decoration: none;
-
-    /* Initial State: Hidden & shifted left */
-    opacity: 0;
-    transform: translateX(-15px);
-
-    /* Prevent shrinking */
-    flex-shrink: 0;
-
-    /* Exit Transition */
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-/* NEW: Image definition for the icons */
-.dropdown-menu a img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    /* Ensures the whole logo is visible */
-    border-radius: 50%;
-    /* Optional: Makes square icons circular */
-    pointer-events: none;
-    /* Let clicks pass through to the link */
-}
-
-.dropdown-menu a[aria-label="GitHub"] img {
-    transform: scale(0.8);
-    /* Shrink GitHub by 20% */
-}
-
-/* Specific scaling for logos to make them look visual equal */
-.dropdown-menu a[aria-label="X / Twitter"] img {
-    transform: scale(0.72);
-    border-radius: 0;
-}
-
-/* ENTRANCE STATE: Triggered when parent is hovered */
-.profile-menu-container:hover .dropdown-menu a {
-    opacity: 1;
-    transform: translateX(0);
-
-    /* Entrance Transition settings */
-    transition-property: opacity, transform;
-    transition-duration: 0.5s, 0.5s;
-    transition-timing-function: ease, cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Staggered Delays for smooth wave effect */
-.profile-menu-container:hover .dropdown-menu a:nth-child(1) {
-    transition-delay: 0.15s;
-}
-
-.profile-menu-container:hover .dropdown-menu a:nth-child(2) {
-    transition-delay: 0.25s;
-}
-
-.profile-menu-container:hover .dropdown-menu a:nth-child(3) {
-    transition-delay: 0.35s;
-}
-
-/* Icon Hover State */
-.dropdown-menu a:hover {
-    /* Scale up image on hover */
-    transform: scale(1.2);
-    transition-delay: 0s;
-}
-
-#profilePic:hover {
-    transform: scale(1.1);
-    border-color: #fff;
-}
-
 #darkModeBtn {
     grid-column: 3;
-    /* Third column */
     justify-self: end;
     padding: 6px 16px;
+    /* Mobile padding */
     cursor: pointer;
     border: none;
     border-radius: 980px;
@@ -269,101 +170,218 @@ main {
     transform: scale(1.03);
 }
 
-/* Typography Defaults (Mobile Strings) */
-h1 {
-    grid-column: 2;
-    /* Explicitly place in center column */
-
-    /* Resize text */
-    font-size: clamp(16px, 4.5vw, 24px);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    margin: 0;
-    padding: 0 8px;
-    /* Slightly increased padding */
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    /* Center text within its own cell */
-    text-align: center;
-    width: 100%;
-}
-
-p {
-    font-size: 17px;
-    line-height: 1.4;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    margin: 0 auto;
-    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* --- 3. DESKTOP UPGRADES (Tablet & PC) --- */
-/* These styles ONLY apply if the screen is wider than 768px (iPad Portrait) */
+/* Desktop Top Bar Overrides */
 @media (min-width: 768px) {
-
-    main {
-        margin: 60px auto;
-        padding: 80px 40px;
-        border-radius: 40px;
-
-        /* Stronger blur on powerful desktop GPUs */
-        backdrop-filter: blur(40px);
-        -webkit-backdrop-filter: blur(40px);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-
-    h1 {
-        grid-column: 2;
-        /* Center column */
-
-        font-size: 24px;
-        /* Default smaller size for mobile */
-        font-weight: 700;
-        letter-spacing: -0.01em;
-        margin: 0;
-        padding: 0;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-
-        /* Centering */
-        text-align: center;
-        white-space: nowrap;
-        /* Prevent wrapping */
-
-        /* Transition for shrinking effect */
-        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
-    }
-
-    .top-bar:has(.profile-menu-container:hover) h1 {
-        /* Scale down AND shift right */
-        transform: scale(0.9) translateX(58px);
-        opacity: 0.8;
-        /* Optional: slight fade for focus effect */
-    }
-
-    h2 {
-        font-size: 64px;
-        /* Big luxury type is back */
-        letter-spacing: -0.02em;
-        margin-bottom: 15px;
-        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    p {
-        font-size: 24px;
-        max-width: 700px;
-    }
-
     #darkModeBtn {
         padding: 8px 24px;
         font-size: 13px;
     }
+
+    /* Interaction: Scale down title when profile menu is hovered on Desktop */
+    .top-bar:has(.profile-menu-container:hover) h1 {
+        transform: scale(0.9) translateX(58px);
+        opacity: 0.8;
+    }
 }
 
-/* --- 4. DARK MODE OVERRIDES (Universally Applied) --- */
+/* =========================================
+   5. COMPONENT: PROFILE MENU
+   ========================================= */
+.profile-menu-container {
+    grid-column: 1;
+    justify-self: start;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 50px;
+}
 
+#profilePic {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 20;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
+}
+
+#profilePic:hover {
+    transform: scale(1.1);
+    border-color: #fff;
+}
+
+.dropdown-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+
+    /* Hidden State */
+    max-width: 0;
+    opacity: 0;
+    margin-left: -20px;
+    padding: 0;
+    overflow: hidden;
+
+    /* Style */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    transition:
+        max-width 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        margin-left 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        padding 0.6s ease,
+        opacity 0.4s ease 0.1s;
+    z-index: 10;
+}
+
+/* Show menu on hover */
+.profile-menu-container:hover .dropdown-menu {
+    max-width: 200px;
+    margin-left: 15px;
+    padding: 0 20px;
+    opacity: 1;
+    height: 40px;
+}
+
+/* Links inside */
+.dropdown-menu a {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0;
+    transform: translateX(-15px);
+    flex-shrink: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Images inside links */
+.dropdown-menu a img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.dropdown-menu a[aria-label="GitHub"] img {
+    transform: scale(0.8);
+}
+
+.dropdown-menu a[aria-label="X / Twitter"] img {
+    transform: scale(0.72);
+    border-radius: 0;
+}
+
+/* Entrance Animations */
+.profile-menu-container:hover .dropdown-menu a {
+    opacity: 1;
+    transform: translateX(0);
+    transition-property: opacity, transform;
+    transition-duration: 0.5s, 0.5s;
+    transition-timing-function: ease, cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.profile-menu-container:hover .dropdown-menu a:nth-child(1) {
+    transition-delay: 0.15s;
+}
+
+.profile-menu-container:hover .dropdown-menu a:nth-child(2) {
+    transition-delay: 0.25s;
+}
+
+.profile-menu-container:hover .dropdown-menu a:nth-child(3) {
+    transition-delay: 0.35s;
+}
+
+.dropdown-menu a:hover {
+    transform: scale(1.2);
+    transition-delay: 0s;
+}
+
+/* =========================================
+   6. COMPONENT: NAVIGATION TILES
+   ========================================= */
+.navigation_options {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 30px;
+
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.about_me,
+.my_Schooling,
+.my_Projects {
+    width: 100%;
+    min-height: 200px;
+    aspect-ratio: 1 / 1;
+
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.15),
+            rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        background 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+.about_me:hover,
+.my_Schooling:hover,
+.my_Projects:hover {
+    transform: translateY(-8px) scale(1.02);
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.25),
+            rgba(255, 255, 255, 0.1));
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* =========================================
+   7. THEME: DARK MODE
+   ========================================= */
 body::before {
     content: "";
     position: fixed;
@@ -408,85 +426,6 @@ body.dark-mode #darkModeBtn:hover {
     color: white;
 }
 
-.navigation_options {
-    /* Match dimensions of the 'Main' element */
-    width: 90%;
-    max-width: 900px;
-    margin: 30px auto;
-    /* 'auto' centers it horizontally like Main */
-    box-sizing: border-box;
-
-    /* Responsive Grid Layout */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-
-    /* Container Spacing */
-    padding: 30px;
-
-    /* "Sub-element" Liquid Glass Background Container */
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-
-.about_me,
-.my_Schooling,
-.my_Projects {
-    /* Remove fixed dimensions to allow grid to control size */
-    width: 100%;
-    min-height: 200px;
-    /* Ensure they have height even with little content */
-    aspect-ratio: 1 / 1;
-    /* Keeps them square-ish */
-
-    /* Liquid Glass Tile Styling */
-    background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.15),
-            rgba(255, 255, 255, 0.05));
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-top: 1px solid rgba(255, 255, 255, 0.4);
-    border-left: 1px solid rgba(255, 255, 255, 0.4);
-
-    border-radius: 24px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-
-    /* Layout internals */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
-
-    /* Text & Interaction */
-    color: white;
-    font-weight: 600;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-        background 0.4s ease,
-        border-color 0.4s ease,
-        box-shadow 0.4s ease;
-}
-
-.about_me:hover,
-.my_Schooling:hover,
-.my_Projects:hover {
-    transform: translateY(-8px) scale(1.02);
-    background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.25),
-            rgba(255, 255, 255, 0.1));
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25);
-}
-
-/* Dark Mode Adjustments for these specific tiles */
 body.dark-mode .navigation_options {
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.05);
